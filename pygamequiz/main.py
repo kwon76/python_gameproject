@@ -31,6 +31,15 @@ clock = pygame.time.Clock()
 #################################################################
 #1. 사용자 게임 초기화(배경 화면, 게임 이미지, 좌표, 속도, 폰트)
 
+#배경 화면
+bg = pygame.image.load("/home/runner/pythongameproject/pygamequiz/quiz_background.png")
+#캐릭터
+chr = pygame.image.load("/home/runner/pythongameproject/pygamequiz/quiz_character.png")
+chr_size = chr.get_rect().size
+chr_width = chr_size[0]
+chr_height = chr_size[1]
+chr_x = 0 #x좌표는 가로 절반으로 위치
+chr_y = 0 #y좌표는 바닥으로 위치
 
 running = True  
 while running:
@@ -46,6 +55,7 @@ while running:
   #4. 충돌 체크
   
   #5. 화면에 출력
+  
   
   pygame.display.update()  
       
