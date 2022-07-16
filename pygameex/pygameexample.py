@@ -76,11 +76,11 @@ while running:
           elif event.key == pygame.K_DOWN:
               to_y += character_speed
 
-          if event.type == pygame.KEYUP:  #방향키를 떼면 멈춤
-              if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                  to_x = 0
-              elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                  to_y = 0
+      if event.type == pygame.KEYUP:  #방향키를 떼면 멈춤
+          if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+              to_x = 0
+          elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+              to_y = 0
 
       #3. 게임 캐릭터 위치 정의
       character_x_pos += to_x * dt
