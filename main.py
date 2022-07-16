@@ -1,6 +1,7 @@
 import pygame
-
-pygame.init()  #초기화(반드시 필요)
+#################################################################
+#반드시 해야 하는 기본 초기화
+pygame.init()  
 
 #화면 크기 설정
 screen_width = 480  #가로 크기
@@ -8,10 +9,12 @@ screen_height = 640  #세로 크기
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 #화면 타이틀 설정
-pygame.display.set_caption("JunHyuk Game")  #게임 이름
+pygame.display.set_caption("게임 이름") 
 
-#FPS : Frame Per Second (fps가 높을수록 캐릭터가 선명하게 움직임)
+#FPS
 clock = pygame.time.Clock()
+#################################################################
+#1. 사용자 게임 초기화(배경 화면, 게임 이미지, 좌표, 속도, 폰트)
 
 #배경 이미지 불러오기
 background = pygame.image.load("/home/runner/pythongameproject/background.png")
@@ -57,9 +60,10 @@ running = True  #게임이 진행 중인가?
 while running:
     dt = clock.tick(20)  #게임화면의 초당 프레임 수를 설정
 
-    for event in pygame.event.get():  #어떤 이벤트가 발생한다면
-      if event.type == pygame.QUIT:  #창이 닫히는 이벤트가 발생한다면
-          running = False  #게임 진행을 종료
+    #2. 이벤트 처리 (키보드, 마우스 등)
+    for event in pygame.event.get():  
+      if event.type == pygame.QUIT:  
+          running = False  
 
       #키보드 이벤트
       if event.type == pygame.KEYDOWN:  #키가 눌러졌는지 확인
@@ -78,9 +82,10 @@ while running:
               elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                   to_y = 0
 
-      #캐릭터의 현재 좌표에서 움직인 만큼 갱신
+      #3. 게임 캐릭터 위치 정의
       character_x_pos += to_x * dt
       character_y_pos += to_y * dt
+      
       #캐릭터가 화면 밖으로 나가지 못하도록 막기
       #가로 경계값 처리
       if character_x_pos < 0:
@@ -102,11 +107,12 @@ while running:
       enemy_rect.left = enemy_x_pos
       enemy_rect.top = enemy_y_pos
 
-      #충돌 체크
+      #4. 충돌 체크
       if character_rect.colliderect(enemy_rect):  #좌표가 겹쳤는지를 확인해주는 함수
           print("충돌했어요")
           running = False
 
+      #5. 화면에 출력
       screen.blit(background, (0, 0))  #왼쪽위 모서리에서부터 background를 그려줌(blit)
       screen.blit(character, (character_x_pos, character_y_pos))
       screen.blit(enemy, (enemy_x_pos, enemy_y_pos))
