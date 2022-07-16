@@ -54,7 +54,13 @@ ddong_to_y = 0
 
 #이동 속도
 chr_speed = 0.2
-ddong_speed = 0.3
+ddong_speed = 0.4
+
+#폰트
+game_font = pygame.font.Font(None, 40)
+
+#피한 똥 개수 설정
+ddong_cnt = 0
 
 running = True  
 while running:
@@ -81,6 +87,7 @@ while running:
   if ddong_y > screen_height:
     ddong_y = -ddong_height
     ddong_x = random()*screen_width
+    ddong_cnt += 1
   
   if chr_x < 0:
     chr_x = 0
@@ -96,12 +103,15 @@ while running:
   ddong_rect.top = ddong_y
   if chr_rect.colliderect(ddong_rect):
     print("똥 맞았네ㅋㅋ")
+    print("피한 똥 개수 : "+str(ddong_cnt))
     running = False
   
   #5. 화면에 출력
   screen.blit(bg, (0, 0))
   screen.blit(chr, (chr_x, chr_y))
   screen.blit(ddong, (ddong_x, ddong_y))
+  cnt = game_font.render(str(ddong_cnt), True, (255, 255, 255)) 
+  screen.blit(cnt, (10, 10))
   
   pygame.display.update()  
       
