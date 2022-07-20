@@ -86,6 +86,7 @@ ball_speed_y = [-18, -15, -12, -9] #index 0, 1, 2, 3에 대응되는 값
 #공 정보 : 공들은 정보들이 많으므로 딕셔너리로 관리
 balls = []
 
+#처음 공 추가
 balls.append({
   "pos_x" : 50, #공의 x좌표
   "pos_y" : 50, #공의 y좌표
@@ -94,6 +95,10 @@ balls.append({
   "to_y" : -6,  #공의 y축 이동방향 
   "init_spd_y" : ball_speed_y[0] #y 최초 속도 (스피드 index로 설정)
 })
+
+#사라질 무기, 공 정보 저장 변수
+weapon_to_remove = -1
+ball_to_remove = -1
 
 running = True  
 while running:
@@ -152,7 +157,7 @@ while running:
     #세로 위치
     if ball_pos_y >= screen_height - stage_height - ball_height:
       #stage에 닿았을 때 튕겨 올라가는 처리 : 최초 속도가 순간 속도
-      ball_val["to_y"] = ball_val["init_spd_y"]
+      ball_val["to_y"] = ball_val["to_y"] * -1
     else:
       #공중에 떠있을 때는 순간 속도를 증가 -> 포물선 처럼 이동
       ball_val["to_y"] += 0.5
@@ -161,7 +166,48 @@ while running:
     ball_val["pos_y"] += ball_val["to_y"]
     
   #4. 충돌 체크
-  
+  #rect 정보 저장
+  character_rect = character.get_rect()
+  character_rect.left = character_x_pos
+  character_rect.top = character_y_pos
+  for ball_idx, ball_val in enumerate(balls): 
+    ball_pos_x = ball_val["pos_x"]
+    ball_pos_y = ball_val["pos_y"]
+    ball_img_idx = ball_val["img_idx"]
+
+    ball_rect = ball_images[ball_img_idx].get_rect()
+    ball_rect.left = ball_pos_x
+    ball_rect.top = ball_pos_y
+    
+    #공과 캐릭터 충돌 처리
+    if character_rect.colliderect(ball_rect): 
+      running = False
+      break
+
+    #공과 무기들 충돌 처리
+    for weapon_idx, weapon_val in enumerate(weapons):
+      weapon_pos_x = weapon_val[0]
+      weapon_pos_y = weapon_val[1]
+
+      weapon_rect = weapon.get_rect()
+      weapon_rect.left = weapon_pos_x
+      weapon_rect.top = weapon_pos_y
+      
+      #충돌하면 공과 무기가 없어지도록 처리
+      if weapon_rect.colliderect(ball_rect):
+        weapon_to_remove = weapon_idx #공과 닿은 무기의 인덱스
+        ball_to_remove = ball_idx #무기와 닿은 공의 인덱스
+        break
+        
+  #충돌된 공과 무기 없애기
+  if ball_to_remove > -1: #인덱스가 저장됐다면
+    del balls[ball_to_remove] #닿은 공을 없앰
+    ball_to_remove = -1 #remove값은 다시 초기화
+
+  if weapon_to_remove > -1:
+    del weapons[weapon_to_remove]
+    weapon_to_remove = -1
+    
   #5. 화면에 출력(위에서부터 아래 순서로 그려짐)
   screen.blit(background, (0, 0))
   
