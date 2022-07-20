@@ -157,7 +157,7 @@ while running:
     #세로 위치
     if ball_pos_y >= screen_height - stage_height - ball_height:
       #stage에 닿았을 때 튕겨 올라가는 처리 : 최초 속도가 순간 속도
-      ball_val["to_y"] = ball_val["to_y"] * -1
+      ball_val["to_y"] = ball_val["init_spd_y"] 
     else:
       #공중에 떠있을 때는 순간 속도를 증가 -> 포물선 처럼 이동
       ball_val["to_y"] += 0.5
@@ -170,6 +170,7 @@ while running:
   character_rect = character.get_rect()
   character_rect.left = character_x_pos
   character_rect.top = character_y_pos
+  
   for ball_idx, ball_val in enumerate(balls): 
     ball_pos_x = ball_val["pos_x"]
     ball_pos_y = ball_val["pos_y"]
@@ -197,6 +198,38 @@ while running:
       if weapon_rect.colliderect(ball_rect):
         weapon_to_remove = weapon_idx #공과 닿은 무기의 인덱스
         ball_to_remove = ball_idx #무기와 닿은 공의 인덱스
+
+        #공을 없앤 뒤 (가장 작은 공이 아니라면) 두개로 쪼개야함
+        if ball_img_idx < 3: #가장 작은 공이 아니라면
+          #현재 공 크기 정보
+          ball_width = ball_rect.size[0]
+          ball_height = ball_rect.size[1]
+
+          #나눠진 공 정보
+          small_ball_rect = ball_images[ball_img_idx + 1].get_rect() 
+          #현재 공 보다 한 단계 작은 공 정보를 가져오기 위해 idx + 1
+          small_ball_width = small_ball_rect.size[0]
+          small_ball_height = small_ball_rect.size[1]
+          
+          
+          #왼쪽으로 튕겨나가는 공
+          balls.append({
+            "pos_x" : ball_pos_x + (ball_width / 2) - (small_ball_width / 2), #공의 x좌표 -> 현재 공의 중앙에서 작은 공 너비의 절반만큼 왼쪽으로 
+            "pos_y" : ball_pos_y + (ball_height / 2) - (small_ball_height / 2), #공의 y좌표
+            "img_idx" : ball_img_idx + 1, #공의 크기 (이미지 index로 설정)
+            "to_x" : -3, #공의 x축 이동방향 (양이면 왼쪽, 음이면 오른쪽)
+            "to_y" : -6,  #공의 y축 이동방향 
+            "init_spd_y" : ball_speed_y[ball_img_idx + 1] #y 최초 속도 
+          })
+          #오른쪽으로 튕겨나가는 공
+          balls.append({
+            "pos_x" : ball_pos_x + (ball_width / 2) - (small_ball_width / 2), #공의 x좌표
+            "pos_y" : ball_pos_y + (ball_height / 2) - (small_ball_height / 2), #공의 y좌표
+            "img_idx" : ball_img_idx + 1, #공의 크기 (이미지 index로 설정)
+            "to_x" : 3, #공의 x축 이동방향 (양이면 왼쪽, 음이면 오른쪽)
+            "to_y" : -6,  #공의 y축 이동방향 
+            "init_spd_y" : ball_speed_y[ball_img_idx + 1] #y 최초 속도 (스피드 index로 설정)
+          })
         break
         
   #충돌된 공과 무기 없애기
