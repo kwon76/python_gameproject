@@ -16,6 +16,11 @@ Project) 오락실 PANG 게임 만들기
 3. 캐릭터 : 33*60
 4. 무기 : 20*430
 5. 공 : 160*160, 80*80, 40*40, 20*20
+
+[내가 원하는 커스텀 추가사항]
+1. 캐릭터가 좌, 우, 무기를 쏠 때마다 움직이는 것처럼 이미지를 바꿔서 출력
+2. stage별로 난이도를 다르게
+3. 무기에 1~2초 정도의 쿨타임을 두고 싶다
 """
 import os
 import pygame
@@ -49,7 +54,7 @@ stage_size = stage.get_rect().size
 stage_height = stage_size[1] #스테이지의 높이 위에 캐릭터를 두기 위해 사용
 
 #캐릭터 만들기
-character = pygame.image.load(os.path.join(image_path, "character_basic.png"))
+character = pygame.image.load(os.path.join(image_path, "character3.png"))
 character_size = character.get_rect().size
 character_width = character_size[0]
 character_height = character_size[1]
@@ -63,7 +68,7 @@ character_to_x = 0
 character_speed = 5
 
 #무기 만들기
-weapon = pygame.image.load(os.path.join(image_path, "weapon2.png"))
+weapon = pygame.image.load(os.path.join(image_path, "weapon.png"))
 weapon_size = weapon.get_rect().size
 weapon_width = weapon_size[0]
 
