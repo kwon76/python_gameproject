@@ -63,7 +63,7 @@ character_to_x = 0
 character_speed = 5
 
 #무기 만들기
-weapon = pygame.image.load(os.path.join(image_path, "weapon_basic.png"))
+weapon = pygame.image.load(os.path.join(image_path, "weapon2.png"))
 weapon_size = weapon.get_rect().size
 weapon_width = weapon_size[0]
 
@@ -239,7 +239,10 @@ while running:
             "init_spd_y" : ball_speed_y[ball_img_idx + 1] #y 최초 속도 (스피드 index로 설정)
           })
         break
-        
+    else: #계속 게임을 진행
+      continue #안쪽 for문 조건이 맞지 않으면 continue, 바깥 for문 계속 수행
+    break #안쪽 for문에서 break를 만나면 여기로 진입 가능, 2중 for문을 한꺼번에 break
+    
   #충돌된 공과 무기 없애기
   if ball_to_remove > -1: #인덱스가 저장됐다면
     del balls[ball_to_remove] #닿은 공을 없앰
